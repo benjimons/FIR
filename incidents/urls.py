@@ -12,6 +12,8 @@ urlpatterns = [
     url(r'^(?P<incident_id>\d+)/edit/$', views.edit_incident, name='edit'),
     url(r'^(?P<incident_id>\d+)/delete/$', views.delete_incident, name='delete'),
     url(r'^(?P<incident_id>\d+)/status/(?P<status>[OBC])$', views.change_status, name='change_status'),
+    url(r'^(?P<incident_id>\d+)/incidentstatus/(?P<isincident>\d+)$', views.change_incident, name='change_incident'),
+    url(r'^(?P<incident_id>\d+)/incidentstatusisevent/(?P<isincident>\d+)$', views.change_incident_event, name='change_incident_event'),
     url(r'^(?P<incident_id>\d+)/attribute$', views.add_attribute, name='add_attribute'),
     url(r'^(?P<incident_id>\d+)/attribute/(?P<attribute_id>\d+)/delete/$', views.delete_attribute, name='delete_attribute'),
 ]

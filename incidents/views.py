@@ -129,7 +129,7 @@ def user_login(request):
 		log("Login attempted from locked account", user)
                 return HttpResponse('Account disabled')
         else:
-            log("Login failed for "+username, None)
+	    log("Login failed for "+username, None)
             return render(request, 'incidents/login.html', {'error': 'error'})
     else:
         return render(request, 'incidents/login.html')
@@ -377,6 +377,35 @@ def delete_incident(request, incident_id, authorization_target=None):
         return HttpResponse(msg)
     else:
         return redirect("incidents:index")
+
+@login_required
+@authorization_required('incidents.handle_incidents', Incident, view_arg='incident_id')
+def change_incident(request, incident_id, isincident, authorization_target=None):
+    if authorization_target is None:
+        i = get_object_or_404(
+            Incident.authorization.for_user(request.user, 'incidents.handle_incidents'),
+            pk=incident_id)
+    else:
+        i = authorization_target
+    i.is_incident = 1
+    i.save()
+    incident_id = str(int(incident_id) + 1)
+    return redirect('incidents:details', incident_id=incident_id)
+@login_required
+
+@authorization_required('incidents.handle_incidents', Incident, view_arg='incident_id')
+def change_incident_event(request, incident_id, isincident, authorization_target=None):
+    if authorization_target is None:
+        i = get_object_or_404(
+            Incident.authorization.for_user(request.user, 'incidents.handle_incidents'),
+            pk=incident_id)
+    else:
+        i = authorization_target
+    i.is_incident = 0
+    i.save()
+    incident_id = str(int(incident_id) + 1)
+
+    return redirect('incidents:details', incident_id=incident_id)
 
 
 @login_required
